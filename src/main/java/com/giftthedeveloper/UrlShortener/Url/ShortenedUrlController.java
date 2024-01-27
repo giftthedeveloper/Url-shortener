@@ -4,6 +4,7 @@ import java.security.NoSuchAlgorithmException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -43,9 +44,9 @@ public class ShortenedUrlController {
 
     @GetMapping("/{shortUrl}")
     public RedirectView redirect(@PathVariable String shortUrl) {
-        System.out.println(shortUrl);
+        // System.out.println(shortUrl);
         ShortenedUrl shortenedUrl = repository.findByShortUrl(BASE_URL + shortUrl);
-        System.out.println(shortenedUrl);
+        // System.out.println(shortenedUrl);
         if (shortenedUrl != null) {
             return new RedirectView(shortenedUrl.getOriginalUrl());
         } else {
@@ -56,6 +57,19 @@ public class ShortenedUrlController {
     @GetMapping("/all")
     public List<ShortenedUrl> getAllUrls() {
         return repository.findAll();
+    }
+
+    @DeleteMapping("/delete/{shortUrl}")
+    public String deleteShortUrl(@PathVariable String shortUrl) {
+        System.out.println(shortUrl);
+        ShortenedUrl shortenedUrl = repository.findByShortUrl(BASE_URL + shortUrl);
+        System.out.println(shortenedUrl);
+        if (shortenedUrl != null ) {
+            repository.delete(shortenedUrl);
+            return "Url sucessfully deleted";
+        } else {
+            return "Url not found";
+        }
     }
     
 
