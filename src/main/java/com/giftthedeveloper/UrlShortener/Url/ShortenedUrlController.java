@@ -28,6 +28,11 @@ public class ShortenedUrlController {
     @Autowired
     ShortenedUrlRepository repository;
     
+    @RequestMapping("/")
+    public String index() {
+        return "index";
+    }
+
     @PostMapping("/create")
     public ResponseEntity<ShortenedUrl> createShortUrl (@RequestBody() ShortenedUrl instance) {
         ShortenedUrl existingUrl = repository.findByOriginalUrl(instance.getOriginalUrl());
