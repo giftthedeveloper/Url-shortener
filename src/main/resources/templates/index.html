@@ -7,9 +7,33 @@
 </head>
 <body>
     <h1>URL Shortener</h1>
-    <form method="post" action="/">
-        <input type="text" name="originalUrl" placeholder="Enter URL">
+    <form id="shortenForm" method="post" action="/api/create">
+        <input type="text" id="originalUrl" name="originalUrl" placeholder="Enter URL">
         <button type="submit">Shorten URL</button>
     </form>
+
+    <h2>Shortened URL:</h2>
+    <p id="shortenedUrl"></p>
+
+    <script>
+        document.getElementById("shortenForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            var originalUrl = document.getElementById("originalUrl").value;
+            fetch('/api/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ originalUrl: originalUrl })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("shortenedUrl").innerText = data.shortUrl;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
 </body>
 </html>
