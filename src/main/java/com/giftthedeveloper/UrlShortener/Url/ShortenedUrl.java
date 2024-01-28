@@ -9,6 +9,7 @@ public class ShortenedUrl {
     private String id;
     private String originalUrl;
     private String shortUrl;
+    private String customUrl;
 
 
     //getters and setters
@@ -34,6 +35,14 @@ public class ShortenedUrl {
 
     public void setShortUrl(String shortUrl) {
         this.shortUrl = shortUrl;
+    }
+
+    public String getCustomUrl() {
+        return customUrl;
+    }
+
+    public void setCustomUrl(String customUrl) {
+        this.customUrl = customUrl;
     }
     
 }

@@ -36,18 +36,30 @@ public class ShortenedUrlController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<ShortenedUrl> createShortUrl (@RequestBody() ShortenedUrl instance) {
-        ShortenedUrl existingUrl = repository.findByOriginalUrl(instance.getOriginalUrl());
+    public ResponseEntity<ShortenedUrl> createShortUrl (@RequestBody ShortenedUrl request) {
+        String customShortUrl = request.getShortUrl();
+        String originalUrl = request.getOriginalUrl();
+
+        ShortenedUrl existingUrl;
+        if (customShortUrl != null && !customShortUrl.isEmpty()) {
+            existingUrl = repository.findByShortUrl(BASE_URL + customShortUrl);
+        } else {
+            existingUrl = repository.findByOriginalUrl(originalUrl);
+        }
+
         if (existingUrl != null ) {
             return ResponseEntity.ok(existingUrl);
         } else {
-            String newShortUrl = generateShortUrl(instance.getOriginalUrl());
+            System.out.println("custom url" + customShortUrl);
+            String newShortUrl = (customShortUrl != null && !customShortUrl.isEmpty()) ? BASE_URL + customShortUrl : generateShortUrl(originalUrl);
+            ShortenedUrl instance = new ShortenedUrl();
+            instance.setOriginalUrl(originalUrl);
             instance.setShortUrl(newShortUrl);
-            System.out.println(instance);
             repository.save(instance);
             return ResponseEntity.ok(instance);
         }
     }
+
 
     @GetMapping("/{url}")
     public RedirectView redirect(@PathVariable String url, HttpServletRequest request) {

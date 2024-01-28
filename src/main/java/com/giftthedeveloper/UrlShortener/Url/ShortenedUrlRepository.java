@@ -6,5 +6,6 @@ public interface ShortenedUrlRepository extends MongoRepository<ShortenedUrl, St
 
     ShortenedUrl findByOriginalUrl(String originalUrl);
     ShortenedUrl findByShortUrl(String shortUrl);
+    ShortenedUrl findByCustomUrl(String customUrl);
     
 }
