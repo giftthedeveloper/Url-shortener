@@ -4,6 +4,7 @@ import java.security.NoSuchAlgorithmException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,10 +31,10 @@ public class ShortenedUrlController {
     @Autowired
     ShortenedUrlRepository repository;
     
-    @RequestMapping("/")
-    public String index() {
-        return "index";
-    }
+    // @RequestMapping("/")
+    // public String index() {
+    //     return "hello world!";
+    // }
 
     @PostMapping("/create")
     public ResponseEntity<ShortenedUrl> createShortUrl (@RequestBody ShortenedUrl request) {
@@ -63,6 +64,11 @@ public class ShortenedUrlController {
 
     @GetMapping("/{url}")
     public RedirectView redirect(@PathVariable String url, HttpServletRequest request) {
+        System.out.println(url);
+        System.out.println("THis url");
+        if (url == null) {
+            return new RedirectView("http://localhost:8080/index.html");
+        }
         System.out.println("This is the short url: " +  url);
         
         // Assuming BASE_URL is defined somewhere, replace it with the appropriate value

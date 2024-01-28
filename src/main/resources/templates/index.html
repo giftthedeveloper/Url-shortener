@@ -4,36 +4,136 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>URL Shortener</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh; /* Changed to min-height */
+        }
+        
+        .content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center; /* Center vertically */
+            min-height: 100vh;
+            padding-top: 20px;
+        }
+        
+
+        .container {
+            max-width: 400px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px; /* Added margin-bottom */
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        button:hover {
+            background-color: #0056b3;
+        }
+        
+        #shortenedUrl {
+            margin-top: 20px;
+            font-size: 18px;
+            text-align: center;
+        }
+        
+        footer {
+            text-align: center;
+            width: 100%; /* Full width */
+            padding: 20px 0; /* Added padding */
+            background-color: #f4f4f4; /* Added background color */
+        }
+    </style>
 </head>
 <body>
-    <h1>URL Shortener</h1>
-    <form id="shortenForm" method="post" action="/api/create">
-        <input type="text" id="originalUrl" name="originalUrl" placeholder="Enter URL">
-        <button type="submit">Shorten URL</button>
-    </form>
+    <div class="content">
+        <div class="container">
+            <h1>URL Shortener</h1>
+            <form id="shortenForm" method="post" action="/api/create">
+                <input type="text" id="originalUrl" name="originalUrl" placeholder="Enter URL">
+                <input type="text" id="customShortUrl" name="customShortUrl" placeholder="Custom Short URL">
+                <button type="submit">Shorten URL</button>
+            </form>
 
-    <h2>Shortened URL:</h2>
-    <p id="shortenedUrl"></p>
+            <h2 id="shortenedUrl">Shortened URL:</h2>
+            <p id="shortenedUrlValue"></p>
+        </div>
+        <footer>
+            <p>Created by Gift Jeremiah</p>
+            <p>
+                LinkedIn: <a href="https://www.linkedin.com/in/gift-jeremiah-1a413024b" target="_blank">My LinkedIn Profile</a><br>
+                GitHub: <a href="https://github.com/giftthedeveloper" target="_blank">My Portfolio</a>
+            </p>
+        </footer>
+    </div>
 
     <script>
         document.getElementById("shortenForm").addEventListener("submit", function(event) {
             event.preventDefault();
             var originalUrl = document.getElementById("originalUrl").value;
-            fetch('/api/create', {
+            console.log(originalUrl)
+            var customShortUrl = document.getElementById("customShortUrl").value;
+            console.log("custom url is " + customShortUrl)
+            fetch('/create', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ originalUrl: originalUrl })
+                body: JSON.stringify({ originalUrl: originalUrl, shortUrl: customShortUrl })
             })
-            .then(response => response.json())
+            .then(response => {
+                console.log('Response status:', response.status);
+                // Return the JSON parsed response
+                return response.json();
+            })
             .then(data => {
-                document.getElementById("shortenedUrl").innerText = data.shortUrl;
+                document.getElementById("shortenedUrlValue").innerText = data.shortUrl;
             })
             .catch(error => {
                 console.error('Error:', error);
             });
         });
     </script>
+
+
 </body>
 </html>
