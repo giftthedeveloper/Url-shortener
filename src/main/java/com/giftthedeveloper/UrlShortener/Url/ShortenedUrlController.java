@@ -50,7 +50,7 @@ public class ShortenedUrlController {
     }
 
     @GetMapping("/{url}")
-    public String redirect(@PathVariable String url, HttpServletRequest request) {
+    public RedirectView redirect(@PathVariable String url, HttpServletRequest request) {
         System.out.println("This is the short url: " +  url);
         
         // Assuming BASE_URL is defined somewhere, replace it with the appropriate value
@@ -62,9 +62,9 @@ public class ShortenedUrlController {
         if (shortenedUrl != null) {
             // Construct the redirect URL to point to a new page with the original URL
             String redirectUrl = shortenedUrl.getOriginalUrl();
-            return (redirectUrl);
+            return new RedirectView(redirectUrl);
         } else {
-            return ("http://localhost/error");
+            return new RedirectView("http://localhost/error");
         }
     }
 
@@ -90,16 +90,30 @@ public class ShortenedUrlController {
     }
     
 
+//     public String generateShortUrl(String originalUrl) {
+//     try {
+//         MessageDigest md = MessageDigest.getInstance("MD5");
+//         byte[] hash = md.digest(originalUrl.getBytes());
+//         String encoded = Base64.getEncoder().encodeToString(hash);
+//         // Take the first 6 characters as the short URL
+//         return BASE_URL + encoded.substring(0, 6);
+//     } catch (NoSuchAlgorithmException e) {
+//         e.printStackTrace();
+//         return null; // Handle error
+//     }
+// }
+
     public String generateShortUrl(String originalUrl) {
-    try {
-        MessageDigest md = MessageDigest.getInstance("MD5");
-        byte[] hash = md.digest(originalUrl.getBytes());
-        String encoded = Base64.getEncoder().encodeToString(hash);
-        // Take the first 6 characters as the short URL
-        return BASE_URL + encoded.substring(0, 6);
-    } catch (NoSuchAlgorithmException e) {
-        e.printStackTrace();
-        return null; // Handle error
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            byte[] hash = md.digest(originalUrl.getBytes());
+            String encoded = Base64.getEncoder().encodeToString(hash);
+            // Take the first 6 characters as the short URL
+            return BASE_URL + encoded.substring(0, 6);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            return null; // Handle error
+        }
     }
-}
+
 }
