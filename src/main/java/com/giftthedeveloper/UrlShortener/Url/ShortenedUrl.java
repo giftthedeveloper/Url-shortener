@@ -35,5 +35,7 @@ public class ShortenedUrl {
     public void setShortUrl(String shortUrl) {
         this.shortUrl = shortUrl;
     }
+
+    
     
 }
