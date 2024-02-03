@@ -22,17 +22,18 @@ import java.util.Base64;
 import java.util.List;
 
 
-@RestController
+@Controller
 @RequestMapping("")
 public class ShortenedUrlController {
     
     @Value("${BASE_URL}")
+
     private String BASE_URL;
 
     // public static final String BASE_URL= "http://127.0.0.1:8080/";
 
     @Autowired
-    ShortenedUrlRepository repository;
+    private ShortenedUrlRepository repository;
     
     // @RequestMapping("/")
     // public String index() {
@@ -50,11 +51,10 @@ public class ShortenedUrlController {
         } else {
             existingUrl = repository.findByOriginalUrl(originalUrl);
         }
-
         if (existingUrl != null ) {
             return ResponseEntity.ok(existingUrl);
         } else {
-            // System.out.println("custom url" + customShortUrl);
+            System.out.println("base url" + BASE_URL);
             String newShortUrl = (customShortUrl != null && !customShortUrl.isEmpty()) ? BASE_URL + customShortUrl : generateShortUrl(originalUrl);
             ShortenedUrl instance = new ShortenedUrl();
             instance.setOriginalUrl(originalUrl);
@@ -69,7 +69,9 @@ public class ShortenedUrlController {
     public RedirectView redirect(@PathVariable String url, HttpServletRequest request) {
         // System.out.println(url);
         // System.out.println("THis url");
-        if (url == null) {
+        if (url.length() <= 2) {
+            System.out.println("Yuppp");
+            System.out.println(BASE_URL);
             return new RedirectView(BASE_URL + "index.html");
         }
         // System.out.println("This is the short url: " +  url);
@@ -92,7 +94,7 @@ public class ShortenedUrlController {
 
     @GetMapping("/all")
     public List<ShortenedUrl> getAllUrls() {
-        // System.out.println(BASE_URL);
+        System.out.println(BASE_URL);
         // System.out.println("urllll");
         return repository.findAll();
     }
@@ -112,19 +114,6 @@ public class ShortenedUrlController {
         }
     }
     
-
-//     public String generateShortUrl(String originalUrl) {
-//     try {
-//         MessageDigest md = MessageDigest.getInstance("MD5");
-//         byte[] hash = md.digest(originalUrl.getBytes());
-//         String encoded = Base64.getEncoder().encodeToString(hash);
-//         // Take the first 6 characters as the short URL
-//         return BASE_URL + encoded.substring(0, 6);
-//     } catch (NoSuchAlgorithmException e) {
-//         e.printStackTrace();
-//         return null; // Handle error
-//     }
-// }
 
     public String generateShortUrl(String originalUrl) {
         try {
