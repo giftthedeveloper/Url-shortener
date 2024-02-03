@@ -113,6 +113,16 @@ public class ShortenedUrlController {
             return "Url not found";
         }
     }
+
+    @DeleteMapping("/delete-by-id/{id}")
+    public String deleteShortUrlById(@PathVariable String id) {
+        try {
+            repository.deleteById(id);
+            return "link deleted successfully";
+        } catch(Exception e) {
+            return "link not found";
+        }
+    }
     
 
     public String generateShortUrl(String originalUrl) {
