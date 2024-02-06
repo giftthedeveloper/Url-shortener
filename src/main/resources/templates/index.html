@@ -109,10 +109,17 @@
     <script>
         document.getElementById("shortenForm").addEventListener("submit", function(event) {
             event.preventDefault();
-            var originalUrl = document.getElementById("originalUrl").value;
-            console.log(originalUrl)
+            var originalUrl = document.getElementById("originalUrl").value.trim();
+            var urlPattern = /^(ftp|http|https):\/\/[^ "]+$/; // Regex pattern for URL validation
+    
+            if (!urlPattern.test(originalUrl)) {
+                alert("Please enter a valid URL.");
+                return;
+            }
+    
+            console.log(originalUrl);
             var customShortUrl = document.getElementById("customShortUrl").value;
-            console.log("custom url is " + customShortUrl)
+            console.log("custom url is " + customShortUrl);
             fetch('/create', {
                 method: 'POST',
                 headers: {
@@ -122,7 +129,6 @@
             })
             .then(response => {
                 console.log('Response status:', response.status);
-                // Return the JSON parsed response
                 return response.json();
             })
             .then(data => {
@@ -133,7 +139,8 @@
             });
         });
     </script>
-
+    
+    
 
 </body>
 </html>
